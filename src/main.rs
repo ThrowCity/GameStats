@@ -24,11 +24,15 @@ fn main() {
         team.players.iter().cloned().map(|p| (p.to_lowercase().clone(), Player::new(p, team.name.clone())))
     }).filter(|p| !p.1.name.is_empty()).collect();
 
+    let mut agents = HashMap::new();
+
+    let mut games = 0;
     for game in fs::read_dir("data/matches/").unwrap() {
         let game = game.unwrap();
         let path = game.path().to_str().unwrap().to_string();
         let data = parse_game(&path, read(&path));
-        apply(&mut players, &teams, data);
+        apply(&mut players, &teams, &mut agents, data);
+        games += 1;
     }
 
     let mut s = Player::csv_header();
@@ -36,9 +40,12 @@ fn main() {
     for p in players.values_mut() {
         p.finish();
         s.push_str(&p.to_csv());
-        s.push('\n');
     }
 
     let mut output = OpenOptions::new().write(true).truncate(true).create(true).open("data/stats.csv").unwrap();
     write!(&mut output, "{}", s).unwrap();
+
+    let csv = write_agents(agents, games);
+    let mut agents = OpenOptions::new().write(true).truncate(true).create(true).open("data/agents.csv").unwrap();
+    write!(&mut agents, "{}", csv).unwrap();
 }

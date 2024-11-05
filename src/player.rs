@@ -67,7 +67,7 @@ impl Player {
 
     pub fn to_csv(&self) -> String {
         let averaged = self.averaged.as_ref().unwrap();
-        format!("{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}",
+        format!("{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n",
             self.name,
             self.agents.keys().cloned().collect::<Vec<_>>().join(" "),
             self.gp,
