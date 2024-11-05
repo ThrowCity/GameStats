@@ -2,6 +2,7 @@ use std::fs;
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
 use hashbrown::HashMap;
+use mvutils::utils;
 use crate::game::*;
 use crate::player::*;
 use crate::team::*;
@@ -20,6 +21,8 @@ fn read(path: &str) -> String {
 }
 
 fn main() {
+    utils::setup_private_panic_default();
+
     let teams = parse_teams(read("data/teams.csv"));
 
     let mut players: HashMap<String, Player> = teams.values().flat_map(|team| {

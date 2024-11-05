@@ -3,6 +3,13 @@ name = "Datastuff"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+lto = true
+strip = true
+panic = "unwind"
+opt-level = 3
+codegen-units = 1
+
 [dependencies]
 hashbrown = "0.15.1"
 mvutils = "1.0.0"
