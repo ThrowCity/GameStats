@@ -59,10 +59,10 @@ pub fn write_agents(agents: HashMap<String, (u32, u32)>, games: u32) -> String {
         csv.push_str(&format!("{},{},{},{},{},{}\n",
             agent,
             win + loss,
-            (win + loss) as f32 / games as f32 * 50.0,
+            (win + loss) as f32 / (2 * games) as f32,
             win,
             loss,
-            win as f32 / (win + loss) as f32 * 100.0
+            win as f32 / (win + loss) as f32
         ));
     }
 
