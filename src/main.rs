@@ -3,12 +3,14 @@ use std::fs::OpenOptions;
 use std::io::{Read, Write};
 use hashbrown::HashMap;
 use crate::game::*;
-use crate::player::Player;
+use crate::player::*;
 use crate::team::*;
+use crate::agent::*;
 
 pub mod game;
 pub mod team;
 pub mod player;
+pub mod agent;
 
 fn read(path: &str) -> String {
     let mut file = OpenOptions::new().read(true).open(path).unwrap();

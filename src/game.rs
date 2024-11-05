@@ -57,11 +57,13 @@ pub struct GameData {
     pub rb: u32,
     pub data: HashMap<String, GameStats>,
     pub agents: HashMap<String, String>,
+    pub nm_agents: Vec<String>,
 }
 
 pub fn parse_game(name: &str, input: String) -> GameData {
     let mut data = HashMap::new();
     let mut agents = HashMap::new();
+    let mut nm_agents = Vec::new();
     let lines = input.lines().collect::<Vec<&str>>();
     if lines.len() < 13 { panic!("Invalid format for input '{name}'"); }
     for i in 1..11 {
@@ -100,7 +102,12 @@ pub fn parse_game(name: &str, input: String) -> GameData {
             eco,
             sub,
         });
-        agents.insert(player, agent);
+        agents.insert(player, agent.clone());
+        if nm_agents.contains(&agent) {
+            nm_agents = nm_agents.into_iter().filter(|a| a != &agent).collect();
+        } else {
+            nm_agents.push(agent);
+        }
     }
     let mut iter = lines[12].split(',');
     let a = iter.next().expect(name).to_string();
@@ -116,5 +123,6 @@ pub fn parse_game(name: &str, input: String) -> GameData {
         rb,
         data,
         agents,
+        nm_agents,
     }
 }
