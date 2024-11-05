@@ -1,0 +1,8 @@
+[package]
+name = "Datastuff"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hashbrown = "0.15.1"
+mvutils = "1.0.0"
