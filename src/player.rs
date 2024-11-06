@@ -37,7 +37,10 @@ impl Player {
         let sum: GameStats = self.stats.drain(..).sum();
         let rounds = self.rp as f32;
         let games = self.gp as f32;
-        let sub_games = self.gp as f32 - sum.sub as f32;
+        let mut sub_games = self.gp as f32 - sum.sub as f32;
+        if sub_games <= 0.0 {
+            sub_games = 1.0;
+        }
         self.averaged = Some(PlayerStats {
             combat_score: sum.combat_score as f32 / games,
             kills: sum.kills,
