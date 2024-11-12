@@ -41,6 +41,10 @@ impl Player {
         if sub_games <= 0.0 {
             sub_games = 1.0;
         }
+        let mut sub_tracker_games = self.gp as f32 - sum.sub as f32;
+        if sub_tracker_games <= 0.0 {
+            sub_tracker_games = 1.0;
+        }
         self.averaged = Some(PlayerStats {
             combat_score: sum.combat_score as f32 / games,
             kills: sum.kills,
@@ -53,13 +57,13 @@ impl Player {
             apg: sum.assists as f32 / games,
             apr: sum.assists as f32 / rounds,
             kd: sum.kd / games,
-            adr: sum.adr / games,
-            kast: sum.kast as f32 / games,
+            adr: sum.adr / sub_tracker_games,
+            kast: sum.kast as f32 / sub_tracker_games,
             fk:sum.fk,
             fkpg: sum.fk as f32 / games,
             fd: sum.fd,
-            fdpg: sum.fd as f32 / games,
-            hs: sum.hs as f32 / games,
+            fdpg: sum.fd as f32 / sub_tracker_games,
+            hs: sum.hs as f32 / sub_tracker_games,
             plants: sum.plants,
             ppg: sum.plants as f32 / sub_games,
             defuses: sum.defuses,

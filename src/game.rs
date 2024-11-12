@@ -19,6 +19,7 @@ pub struct GameStats {
     pub defuses: u32,
     pub eco: u32,
     pub sub: u32,
+    pub sub_tracker: u32,
 }
 
 impl Add for GameStats {
@@ -38,6 +39,7 @@ impl Add for GameStats {
         self.defuses += other.defuses;
         self.eco += other.eco;
         self.sub += other.sub;
+        self.sub_tracker += other.sub_tracker;
 
         self
     }
@@ -85,7 +87,8 @@ pub fn parse_game(name: &str, input: String) -> GameData {
         let plants = iter.next().expect(name).parse::<u32>().unwrap_or(0);
         let defuses = iter.next().expect(name).parse::<u32>().unwrap_or(0);
         let eco = iter.next().expect(name).parse::<u32>().unwrap_or(0);
-        let sub = if plants == 0 && defuses == 0 && eco == 0 { 1 } else { 0 };
+        let sub = if eco == 0 { 1 } else { 0 };
+        let sub_tracker = if adr == 0.0 && kast == 0.0 && hs == 0.0 { 1 } else { 0 };
         data.insert(player.clone(), GameStats {
             combat_score,
             kills,
@@ -95,12 +98,13 @@ pub fn parse_game(name: &str, input: String) -> GameData {
             adr,
             kast: kast as u32,
             fk,
-            fd,
+            fd: if sub_tracker == 1 { 0 } else { fd },
             hs: hs as u32,
-            plants,
-            defuses,
+            plants: if sub == 1 { 0 } else { plants },
+            defuses: if sub == 1 { 0 } else { defuses },
             eco,
             sub,
+            sub_tracker,
         });
         agents.insert(player, agent.clone());
         if nm_agents.contains(&agent) {
