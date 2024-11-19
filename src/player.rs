@@ -41,7 +41,7 @@ impl Player {
         if sub_games <= 0.0 {
             sub_games = 1.0;
         }
-        let mut sub_tracker_games = self.gp as f32 - sum.sub as f32;
+        let mut sub_tracker_games = self.gp as f32 - sum.sub_tracker as f32;
         if sub_tracker_games <= 0.0 {
             sub_tracker_games = 1.0;
         }
