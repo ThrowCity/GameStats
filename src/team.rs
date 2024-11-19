@@ -49,7 +49,6 @@ pub fn apply(players: &mut HashMap<String, Player>, teams: &HashMap<String, Team
             }
             p.rw += win;
             p.rl += loss;
-            p.rp += win + loss;
             p.stats.push(stats);
         }
     }
