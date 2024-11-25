@@ -1,5 +1,6 @@
 use hashbrown::HashMap;
 use crate::game::GameStats;
+use crate::team::Team;
 
 #[derive(Debug)]
 pub struct Player {
@@ -106,4 +107,18 @@ pub struct PlayerStats {
     pub apg: f32,
     pub kd: f32,
     pub hs: f32,
+}
+
+pub fn parse_duplicates(input: String) -> HashMap<String, String> {
+    let mut duplicates = HashMap::new();
+    for line in input.lines() {
+        let mut iter = line.split(',');
+        if let Some(name) = iter.next().map(String::from) {
+            let name = name.to_lowercase();
+            for alternate in iter {
+                duplicates.insert(alternate.to_string().to_lowercase(), name.clone());
+            }
+        }
+    }
+    duplicates
 }

@@ -20,10 +20,24 @@ fn read(path: &str) -> String {
     s
 }
 
+fn read_optional(path: &str) -> String {
+    if let Ok(mut file) = OpenOptions::new().read(true).open(path) {
+        let mut s = String::new();
+        let _ = file.read_to_string(&mut s).unwrap_or_else(|_| {
+            s.clear();
+            0
+        });
+        s
+    } else { String::new() }
+}
+
+
 fn main() {
     utils::setup_private_panic_default();
 
     let teams = parse_teams(read("data/teams.csv"));
+
+    let duplicates = parse_duplicates(read_optional("data/duplicates.csv"));
 
     let mut players: HashMap<String, Player> = teams.values().flat_map(|team| {
         team.players.iter().cloned().map(|p| (p.to_lowercase().clone(), Player::new(p, team.name.clone())))
@@ -35,7 +49,7 @@ fn main() {
     for game in fs::read_dir("data/matches/").unwrap() {
         let game = game.unwrap();
         let path = game.path().to_str().unwrap().to_string();
-        let data = parse_game(&path, read(&path));
+        let data = parse_game(&path, read(&path), &duplicates);
         apply(&mut players, &teams, &mut agents, data);
         games += 1;
     }

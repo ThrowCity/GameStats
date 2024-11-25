@@ -48,7 +48,7 @@ pub struct GameData {
     pub nm_agents: Vec<String>,
 }
 
-pub fn parse_game(name: &str, input: String) -> GameData {
+pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String>) -> GameData {
     let mut data = HashMap::new();
     let mut agents = HashMap::new();
     let mut nm_agents = Vec::new();
@@ -59,6 +59,7 @@ pub fn parse_game(name: &str, input: String) -> GameData {
         let agent = iter.next().expect(name).to_string();
         if agent.is_empty() { continue; }
         let player = iter.next().expect(name).to_lowercase();
+        let player = duplicates.get(&player).cloned().unwrap_or(player).to_lowercase();
         let combat_score = iter.next().expect(name).parse::<u32>().expect(name);
         let kills = iter.next().expect(name).parse::<u32>().expect(name);
         let deaths = iter.next().expect(name).parse::<u32>().expect(name);
