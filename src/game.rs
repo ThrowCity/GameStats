@@ -57,6 +57,7 @@ pub struct GameData {
     pub b: String,
     pub ra: u32,
     pub rb: u32,
+    pub tr: u32,
     pub data: HashMap<String, GameStats>,
     pub agents: HashMap<String, String>,
     pub nm_agents: Vec<String>,
@@ -68,6 +69,7 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
     let mut nm_agents = Vec::new();
     let lines = input.lines().collect::<Vec<&str>>();
     if lines.len() < 13 { panic!("Invalid format for input '{name}'"); }
+    let mut s = false;
     for i in 1..11 {
         let mut iter = lines[i].split(',');
         let agent = iter.next().expect(name).to_string();
@@ -89,7 +91,10 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
         let defuses = iter.next().expect(name).parse::<u32>().unwrap_or(0);
         let eco = iter.next().expect(name).parse::<u32>().unwrap_or(0);
         let sub = if eco == 0 { 1 } else { 0 };
-        let sub_tracker = if adr == 0.0 && kast == 0.0 && hs == 0.0 { 1 } else { 0 };
+        let sub_tracker = if adr == 0.0 && kast == 0.0 && hs == 0.0 {
+            s = true;
+            1
+        } else { 0 };
         data.insert(player.clone(), GameStats {
             combat_score,
             kills,
@@ -121,11 +126,13 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
     let ra = iter.next().expect(name).parse::<u32>().expect(name);
     let _ = iter.next();
     let rb = iter.next().expect(name).parse::<u32>().expect(name);
+    data.values_mut().for_each(|v| v.adr *= (ra + rb) as f32);
     GameData {
         a,
         b,
         ra,
         rb,
+        tr: if s { 0 } else { ra + rb },
         data,
         agents,
         nm_agents,
