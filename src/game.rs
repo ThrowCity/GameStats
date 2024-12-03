@@ -92,6 +92,7 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
     let ra = iter.next().expect(name).parse::<u32>().expect(name);
     let _ = iter.next();
     let rb = iter.next().expect(name).parse::<u32>().expect(name);
+    data.values_mut().for_each(|v| v.adr *= (ra + rb) as f32);
     GameData {
         a,
         b,
