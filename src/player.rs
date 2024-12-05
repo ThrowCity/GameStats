@@ -40,6 +40,7 @@ impl Player {
         let sum: GameStats = self.stats.drain(..).sum();
         let rounds = self.rp as f32;
         let games = self.gp as f32;
+        let tracker_rounds = self.tr as f32;
         let mut sub_games = self.gp as f32 - sum.sub as f32;
         if sub_games <= 0.0 {
             sub_games = 1.0;
@@ -59,9 +60,9 @@ impl Player {
             assists: sum.assists,
             apg: sum.assists as f32 / games,
             apr: sum.assists as f32 / rounds,
-            kd: sum.kd / games,
-            adr: sum.adr / self.tr as f32,
-            kast: sum.kast as f32 / sub_tracker_games,
+            kd: sum.kills as f32 / sum.deaths as f32,
+            adr: sum.adr / tracker_rounds,
+            kast: sum.kast / tracker_rounds,
             fk:sum.fk,
             fkpg: sum.fk as f32 / games,
             fd: sum.fd,

@@ -11,7 +11,7 @@ pub struct GameStats {
     pub assists: u32,
     pub kd: f32,
     pub adr: f32,
-    pub kast: u32,
+    pub kast: f32,
     pub fk: u32,
     pub fd: u32,
     pub hs: u32,
@@ -82,7 +82,7 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
         let assists = iter.next().expect(name).parse::<u32>().expect(name);
         let kd = iter.next().expect(name).parse::<f32>().expect(name);
         let adr = iter.next().expect(name).parse::<f32>().expect(name);
-        let kast = iter.next().expect(name).replace('%', "").parse::<f32>().expect(name) * 100.0;
+        let kast = iter.next().expect(name).replace('%', "").parse::<f32>().expect(name);
         let fk = iter.next().expect(name).parse::<u32>().expect(name);
         let fd = iter.next().expect(name).parse::<u32>().expect(name);
         let _ = iter.next();
@@ -102,7 +102,7 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
             assists,
             kd,
             adr,
-            kast: kast as u32,
+            kast,
             fk,
             fd: if sub_tracker == 1 { 0 } else { fd },
             hs: hs as u32,
@@ -126,7 +126,12 @@ pub fn parse_game(name: &str, input: String, duplicates: &HashMap<String, String
     let ra = iter.next().expect(name).parse::<u32>().expect(name);
     let _ = iter.next();
     let rb = iter.next().expect(name).parse::<u32>().expect(name);
-    data.values_mut().for_each(|v| v.adr *= (ra + rb) as f32);
+    let rounds = (ra + rb) as f32;
+    data.values_mut().for_each(|v| {
+        v.adr *= rounds;
+        v.kast *= rounds;
+        v.kast = v.kast.round()
+    });
     GameData {
         a,
         b,
