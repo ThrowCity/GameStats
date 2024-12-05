@@ -47,7 +47,7 @@ impl Player {
             dpg: sum.deaths as f32 / games,
             assists: sum.assists,
             apg: sum.assists as f32 / games,
-            kd: sum.kd / games,
+            kd: sum.kills as f32 / sum.deaths as f32,
             hs: sum.hs as f32 / sub_tracker_games,
         });
     }
